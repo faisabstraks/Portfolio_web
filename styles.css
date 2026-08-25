@@ -242,8 +242,28 @@ h1 .stroke{
 .clip:hover .clip-arrow{transform:translateX(4px);color:var(--accent-2);}
 
 @media(max-width:640px){
-  .clip{grid-template-columns:40px 1fr 20px;}
-  .clip-meta{display:none;}
+  .clip{
+    grid-template-columns:1fr 20px;
+    grid-template-areas:
+      "index arrow"
+      "file  file"
+      "meta  meta"
+      "title title"
+      "desc  desc";
+    row-gap:6px;
+  }
+  .clip-index{grid-area:index;}
+  .clip-arrow{grid-area:arrow;justify-self:end;}
+  .clip-main{display:contents;}
+  .clip-main .clip-file{grid-area:file;margin-bottom:0;}
+  .clip-main h3{grid-area:title;margin-bottom:0;}
+  .clip-main p{grid-area:desc;}
+  .clip-meta{
+    grid-area:meta;
+    display:block;
+    text-align:left;
+    margin:2px 0 4px;
+  }
 }
 
 /* ---------- CONTACT ---------- */
