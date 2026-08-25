@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Editing & Film Portfolios — Faisabstrak</title>
+<link rel="icon" type="image/png" href="images\favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -75,20 +76,7 @@
   <span>REC ● STATUS: ONLINE</span>
 </footer>
 
-<script>
-  document.querySelectorAll('.video-facade').forEach(function(facade){
-    facade.addEventListener('click', function(){
-      var id = facade.getAttribute('data-video-id');
-      var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
-      iframe.title = 'YouTube video player';
-      iframe.setAttribute('frameborder', '0');
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.setAttribute('allowfullscreen', '');
-      facade.replaceWith(iframe);
-    });
-  });
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
