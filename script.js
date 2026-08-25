@@ -79,7 +79,14 @@
       });
       if (updateField) {
         var strong = updateField.querySelector('strong');
-        var path = location.pathname.split('/').pop() || 'index.html';
+        // Prefer the filename declared on <body data-page-file="...">, since
+        // some hosts (e.g. Cloudflare "clean URLs") strip the .html from the
+        // visible URL, which would otherwise make location.pathname wrong.
+        var path = document.body.getAttribute('data-page-file');
+        if (!path) {
+          path = location.pathname.split('/').pop() || 'index.html';
+          if (!/\.\w+$/.test(path)) path += '.html';
+        }
         getLastCommitDate(path).then(function (date) {
           if (!date || !strong) return;
           strong.textContent = formatUpdated(date);
@@ -90,6 +97,8 @@
 })();
 
 
+// ---------------------------------------------------------------------
+// Shared behaviour for every ".video-facade" element across the site
 // (used on 3d-work-portfolios.html, addon-dev.html, editing-and-film.html):
 //
 // 1. If a facade doesn't already have a thumbnail set inline, try to load
