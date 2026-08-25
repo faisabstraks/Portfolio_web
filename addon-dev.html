@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addon & Tools — Faisabstrak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+
+<header>
+  <div class="scrub">
+    <div class="scrub-left"><span class="rec-dot"></span><span>REC</span></div>
+    <div class="brand"><a href="index.html">FAISABSTRAK</a></div>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+    <label for="nav-toggle" class="nav-toggle-label">☰</label>
+    <nav onclick="document.getElementById('nav-toggle').checked=false">
+      <a href="index.html#about">About</a>
+      <a href="index.html#portfolio">Portfolios</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+  <div class="ruler"></div>
+</header>
+
+<section class="wrap">
+  <div style="padding-top:32px;">
+    <a href="index.html#portfolio" class="back-link">← Back to Portfolios</a>
+  </div>
+
+  <img class="article-cover" src="https://placehold.co/1600x686/1B1E26/8B8F9B?text=COVER+IMAGE" alt="Addon & Tools cover">
+
+  <div class="article-hero">
+    <div class="article-file">ADDON_DEV.py</div>
+    <h1>Addon &amp; Tools</h1>
+    <p class="article-lede">
+      My exploration into developing a Blender add-on called <strong>BlendCam</strong>, a tool
+      designed to bring my ideas and workflow into Blender through a custom camera solution.
+    </p>
+    <div class="article-meta-row">
+      <span>CATEGORY: <strong>Tools</strong></span>
+      <span>SOFTWARE: <strong>Blender / Python</strong></span>
+      <span>UPDATE: <strong>Regularly</strong></span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="entries">
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-index">01</span>
+        <h2 class="entry-title">BlendCam</h2>
+      </div>
+      <p class="entry-desc">Write the story of this addon here — the problem it solves, how it works, and where things stand.</p>
+      <div class="entry-media">
+        <div class="video-facade"
+             data-video-id="VIDEO_ID_1"
+             style="background-image:url('https://img.youtube.com/vi/VIDEO_ID_1/maxresdefault.jpg')">
+          <div class="play-btn"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duplicate the block above for each tool / addon -->
+
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>© 2026 Faisabstrak</span>
+  <span>REC ● STATUS: ONLINE</span>
+</footer>
+
+<script>
+  document.querySelectorAll('.video-facade').forEach(function(facade){
+    facade.addEventListener('click', function(){
+      var id = facade.getAttribute('data-video-id');
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
+      iframe.title = 'YouTube video player';
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      facade.replaceWith(iframe);
+    });
+  });
+</script>
+
+</body>
+</html>
