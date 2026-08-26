@@ -306,6 +306,22 @@ h1 .stroke{
 }
 .contact-links a:hover{color:var(--accent-2);}
 .contact-links a small{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;}
+
+.contact-row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 0;border-bottom:1px solid var(--line);
+}
+.contact-row a{padding:0;border-bottom:none;flex:1;min-width:0;}
+.copy-btn{
+  flex-shrink:0;
+  font-family:var(--mono);font-size:11px;letter-spacing:.03em;
+  color:var(--muted);background:transparent;border:1px solid var(--line);
+  padding:7px 14px;cursor:pointer;border-radius:2px;
+  transition:color .2s ease, border-color .2s ease;
+}
+.copy-btn:hover{color:var(--text);border-color:var(--accent-2);}
+.copy-btn.is-copied{color:var(--accent-2);border-color:var(--accent-2);}
+
 .contact-note{color:var(--muted);font-size:15px;max-width:400px;}
 .contact-note .rec-dot{display:inline-block;margin-right:6px;}
 
@@ -443,7 +459,12 @@ footer{
   gap:14px;
 }
 .image-gallery figure{margin:0;}
-.image-gallery img{width:100%;display:block;border:1px solid var(--line);background:var(--surface);}
+.image-gallery img{
+  width:100%;display:block;border:1px solid var(--line);background:var(--surface);
+  filter:blur(0);opacity:1;
+  transition:filter .5s ease, opacity .5s ease;
+}
+.image-gallery img.is-loading{filter:blur(16px);opacity:.5;}
 .image-gallery figcaption{
   font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;
 }

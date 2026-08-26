@@ -241,7 +241,7 @@ document.addEventListener('keydown', function (e) {
     shapes[index].classList.remove('is-active');
     index = (index + 1) % shapes.length;
     shapes[index].classList.add('is-active');
-  }, 9000);
+  }, 5000);
 })();
 
 // ---------------------------------------------------------------------
@@ -412,4 +412,47 @@ document.addEventListener('keydown', function (e) {
     setTimeout(tick, deleting ? 35 : 65);
   }
   tick();
+})();
+
+// ---------------------------------------------------------------------
+// Copy email to clipboard — click the "Copy" button next to the email
+// link in the Contact section, with brief visual feedback.
+// ---------------------------------------------------------------------
+(function () {
+  document.querySelectorAll('.copy-btn[data-copy-text]').forEach(function (btn) {
+    var defaultLabel = btn.textContent;
+    var resetTimer = null;
+
+    btn.addEventListener('click', function () {
+      var text = btn.getAttribute('data-copy-text');
+      if (!navigator.clipboard) return; // mailto link next to it still works as a fallback
+
+      navigator.clipboard.writeText(text).then(function () {
+        clearTimeout(resetTimer);
+        btn.textContent = 'Copied!';
+        btn.classList.add('is-copied');
+        resetTimer = setTimeout(function () {
+          btn.textContent = defaultLabel;
+          btn.classList.remove('is-copied');
+        }, 1500);
+      }).catch(function () { /* clipboard permission denied — ignore silently */ });
+    });
+  });
+})();
+
+// ---------------------------------------------------------------------
+// Progressive image blur-up — gallery images fade in from a soft blur
+// to fully sharp once they finish loading, instead of popping in.
+// ---------------------------------------------------------------------
+(function () {
+  document.querySelectorAll('.image-gallery img').forEach(function (img) {
+    if (img.complete && img.naturalWidth > 0) return; // already loaded (e.g. from cache) — show as-is
+    img.classList.add('is-loading');
+    img.addEventListener('load', function () {
+      img.classList.remove('is-loading');
+    }, { once: true });
+    img.addEventListener('error', function () {
+      img.classList.remove('is-loading');
+    }, { once: true });
+  });
 })();
