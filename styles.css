@@ -280,6 +280,7 @@ h1 .stroke{
       "title title"
       "desc  desc";
     row-gap:6px;
+    padding:16px 4px;
   }
   .clip-index{grid-area:index;}
   .clip-arrow{grid-area:arrow;justify-self:end;}
@@ -334,9 +335,10 @@ footer{
 }
 
 @media(max-width:860px){
-  .hero{grid-template-columns:1fr;padding-top:80px;}
+  .hero{grid-template-columns:1fr;padding-top:48px;padding-bottom:56px;}
   .viewport{order:-1;width:min(280px,70vw);max-width:280px;margin:0 auto;}
   .about-grid,.contact-grid{grid-template-columns:1fr;}
+  .section{padding:56px 0;}
 
   /* mobile nav becomes a dropdown, toggled by the hamburger button */
   .nav-toggle-label{display:flex;}
