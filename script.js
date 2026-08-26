@@ -98,16 +98,23 @@
 
 
 // ---------------------------------------------------------------------
-// Shared behaviour for every ".video-facade" element across the site
-// (used on 3d-work-portfolios.html, addon-dev.html, editing-and-film.html):
+// Shared behaviour for every video slot across the site (used on
+// 3d-work-portfolios.html, addon-dev.html, editing-and-film.html):
 //
-// 1. If a facade doesn't already have a thumbnail set inline, try to load
-//    the best available YouTube thumbnail, falling back through lower
-//    resolutions if a higher one doesn't exist for that video.
-// 2. On click, swap the facade for a real YouTube iframe (lazy-load
-//    pattern, so we don't load every embed up front).
-// 3. Pressing Esc swaps any currently-playing iframe back to its facade
-//    (see the "#8 keyboard shortcuts" block near the bottom of this file).
+// Each slot is just a single element with a data attribute —
+//   <div class="entry-media" data-video-id="XXXXXXXXXXX"></div>
+// — and this script builds the clickable facade (thumbnail + play
+// button) into it. No per-video HTML to hand-write or copy-paste.
+//
+// 1. loadBestThumbnail() fetches the best available YouTube thumbnail,
+//    falling back through lower resolutions if a higher one doesn't
+//    exist for that video.
+// 2. On click, the facade swaps itself for a real YouTube iframe
+//    (lazy-load pattern — nothing embeds until clicked).
+// 3. If the playing iframe is scrolled fully out of view, it's swapped
+//    back to its facade automatically — stops the video without a
+//    manual pause button (see the IntersectionObserver below).
+// 4. Pressing Esc closes any currently-playing video the same way.
 
 function createVideoFacade(id) {
   var facade = document.createElement('div');
@@ -133,20 +140,9 @@ function attachFacadeClick(facade) {
     iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
     iframe.setAttribute('allowfullscreen', '');
     facade.replaceWith(iframe);
+    if (videoScrollObserver) videoScrollObserver.observe(iframe);
   });
 }
-
-document.querySelectorAll('.video-facade').forEach(function (facade) {
-  var id = facade.getAttribute('data-video-id');
-
-  // Only auto-fetch a thumbnail if one hasn't already been set inline
-  // (addon-dev.html / editing-and-film.html set theirs manually).
-  if (!facade.style.backgroundImage) {
-    loadBestThumbnail(facade, id);
-  }
-
-  attachFacadeClick(facade);
-});
 
 function loadBestThumbnail(facade, id) {
   var qualities = ['maxresdefault', 'sddefault', 'hqdefault'];
@@ -171,6 +167,30 @@ function loadBestThumbnail(facade, id) {
 }
 
 // ---------------------------------------------------------------------
+// Auto-pause on scroll — if a playing video's iframe scrolls completely
+// out of view, swap it back to its facade (which stops playback, since
+// the iframe itself gets removed from the page).
+// ---------------------------------------------------------------------
+var videoScrollObserver = ('IntersectionObserver' in window)
+  ? new IntersectionObserver(function (items) {
+      items.forEach(function (item) {
+        if (item.isIntersecting) return;
+        var iframe = item.target;
+        var id = iframe.getAttribute('data-video-id');
+        videoScrollObserver.unobserve(iframe);
+        iframe.replaceWith(createVideoFacade(id));
+      });
+    }, { threshold: 0 })
+  : null;
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.entry-media[data-video-id]').forEach(function (slot) {
+    var id = slot.getAttribute('data-video-id');
+    slot.appendChild(createVideoFacade(id));
+  });
+});
+
+// ---------------------------------------------------------------------
 // #8 Keyboard shortcut: Esc closes any currently-playing video and
 // swaps it back to its clickable thumbnail facade.
 // ---------------------------------------------------------------------
@@ -178,6 +198,7 @@ document.addEventListener('keydown', function (e) {
   if (e.key !== 'Escape') return;
   document.querySelectorAll('iframe.video-embed').forEach(function (iframe) {
     var id = iframe.getAttribute('data-video-id');
+    if (videoScrollObserver) videoScrollObserver.unobserve(iframe);
     iframe.replaceWith(createVideoFacade(id));
   });
 });
@@ -342,6 +363,15 @@ document.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft') show(current - 1);
     if (e.key === 'ArrowRight') show(current + 1);
   });
+})();
+
+// ---------------------------------------------------------------------
+// Footer copyright year — always reflects the visitor's current year,
+// so it never needs a manual edit across all 4 pages every January.
+// ---------------------------------------------------------------------
+(function () {
+  var yearEl = document.getElementById('copyright-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
 // ---------------------------------------------------------------------
