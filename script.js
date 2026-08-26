@@ -1,11 +1,3 @@
-// ---------------------------------------------------------------------
-// Real "last updated" info pulled from this repo's GitHub commit history.
-// Works on:
-//  - index.html: each portfolio card shows the last commit date of the
-//    page it links to.
-//  - the article pages themselves: the "UPDATE:" field shows the last
-//    commit date of that page's own HTML file.
-// ---------------------------------------------------------------------
 (function () {
   var GH_OWNER = 'faisabstraks';
   var GH_REPO = 'Portfolio_web';
@@ -183,6 +175,22 @@ document.addEventListener('keydown', function (e) {
 });
 
 // ---------------------------------------------------------------------
+// Hero viewport shape cycler — alternates between the wireframe cube
+// and the wireframe sphere every few seconds (landing page only).
+// ---------------------------------------------------------------------
+(function () {
+  var shapes = document.querySelectorAll('.shape-stage .scene');
+  if (shapes.length < 2) return;
+
+  var index = 0;
+  setInterval(function () {
+    shapes[index].classList.remove('is-active');
+    index = (index + 1) % shapes.length;
+    shapes[index].classList.add('is-active');
+  }, 5000);
+})();
+
+// ---------------------------------------------------------------------
 // Back to top button — fades in once you've scrolled down a bit,
 // click to smooth-scroll back to the top of the page.
 // ---------------------------------------------------------------------
@@ -311,7 +319,7 @@ document.addEventListener('keydown', function (e) {
   var el = document.getElementById('role-typed');
   if (!el) return;
 
-  var roles = ['3D Artist', 'Product Animation','3D Generalist ','3D Interior Design','Art Director','Video Editor'];
+  var roles = ['3D Artist', 'Product Animation', '3D Generalist', '3D Interior Design', 'Art Director', 'Video Editor'];
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     el.textContent = roles.join(' / ');

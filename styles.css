@@ -155,6 +155,35 @@ h1 .stroke{
   width:140px;height:140px;
   perspective:600px;
 }
+.shape-stage{position:relative;width:140px;height:140px;}
+.shape-stage .scene{
+  position:absolute;top:0;left:0;
+  opacity:0;pointer-events:none;
+  transition:opacity .7s ease;
+}
+.shape-stage .scene.is-active{opacity:1;pointer-events:auto;}
+
+/* ---------- wireframe sphere (armillary rings), alternates with the cube ---------- */
+.sphere-shape{
+  width:100%;height:100%;position:relative;
+  transform-style:preserve-3d;
+  animation:spin 20s linear infinite;
+}
+.sphere-shape .ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:1px solid var(--accent-2);
+  background:rgba(110,231,216,.03);
+}
+.sphere-shape .ring-1{transform:rotateY(0deg);}
+.sphere-shape .ring-2{transform:rotateY(60deg);}
+.sphere-shape .ring-3{transform:rotateY(120deg);}
+.sphere-shape .ring-4{transform:rotateX(90deg);}
+
+@media (prefers-reduced-motion: reduce){
+  .sphere-shape{animation:none; transform:rotateX(-20deg) rotateY(-35deg);}
+  .shape-stage .scene{transition:opacity .1s linear;}
+}
 .cube{
   width:100%;height:100%;position:relative;
   transform-style:preserve-3d;
@@ -310,6 +339,7 @@ footer{
 
   /* shrink the wireframe cube so it stays inside its box while rotating */
   .scene{width:100px;height:100px;}
+  .shape-stage{width:100px;height:100px;}
   .cube .face{width:100px;height:100px;}
   .face.front{transform:translateZ(50px);}
   .face.back{transform:translateZ(-50px) rotateY(180deg);}
