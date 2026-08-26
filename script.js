@@ -106,6 +106,35 @@
 //    resolutions if a higher one doesn't exist for that video.
 // 2. On click, swap the facade for a real YouTube iframe (lazy-load
 //    pattern, so we don't load every embed up front).
+// 3. Pressing Esc swaps any currently-playing iframe back to its facade
+//    (see the "#8 keyboard shortcuts" block near the bottom of this file).
+
+function createVideoFacade(id) {
+  var facade = document.createElement('div');
+  facade.className = 'video-facade';
+  facade.setAttribute('data-video-id', id);
+  var playBtn = document.createElement('div');
+  playBtn.className = 'play-btn';
+  facade.appendChild(playBtn);
+  loadBestThumbnail(facade, id);
+  attachFacadeClick(facade);
+  return facade;
+}
+
+function attachFacadeClick(facade) {
+  facade.addEventListener('click', function () {
+    var id = facade.getAttribute('data-video-id');
+    var iframe = document.createElement('iframe');
+    iframe.className = 'video-embed';
+    iframe.setAttribute('data-video-id', id);
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
+    iframe.title = 'YouTube video player';
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', '');
+    facade.replaceWith(iframe);
+  });
+}
 
 document.querySelectorAll('.video-facade').forEach(function (facade) {
   var id = facade.getAttribute('data-video-id');
@@ -116,15 +145,7 @@ document.querySelectorAll('.video-facade').forEach(function (facade) {
     loadBestThumbnail(facade, id);
   }
 
-  facade.addEventListener('click', function () {
-    var iframe = document.createElement('iframe');
-    iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
-    iframe.title = 'YouTube video player';
-    iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-    iframe.setAttribute('allowfullscreen', '');
-    facade.replaceWith(iframe);
-  });
+  attachFacadeClick(facade);
 });
 
 function loadBestThumbnail(facade, id) {
@@ -148,3 +169,176 @@ function loadBestThumbnail(facade, id) {
   }
   tryNext();
 }
+
+// ---------------------------------------------------------------------
+// #8 Keyboard shortcut: Esc closes any currently-playing video and
+// swaps it back to its clickable thumbnail facade.
+// ---------------------------------------------------------------------
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('iframe.video-embed').forEach(function (iframe) {
+    var id = iframe.getAttribute('data-video-id');
+    iframe.replaceWith(createVideoFacade(id));
+  });
+});
+
+// ---------------------------------------------------------------------
+// Back to top button — fades in once you've scrolled down a bit,
+// click to smooth-scroll back to the top of the page.
+// ---------------------------------------------------------------------
+(function () {
+  var btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.textContent = '↑';
+  document.body.appendChild(btn);
+
+  var ticking = false;
+  function update() {
+    if (window.scrollY > 480) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+
+  btn.addEventListener('click', function () {
+    window.scrollTo({
+      top: 0,
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    });
+  });
+})();
+
+// ---------------------------------------------------------------------
+// #3 Fade-in on scroll — each ".entry" on an article page animates into
+// view the first time it crosses into the viewport.
+// ---------------------------------------------------------------------
+(function () {
+  var entries = document.querySelectorAll('.entry');
+  if (!entries.length) return;
+
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    entries.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (items) {
+    items.forEach(function (item) {
+      if (item.isIntersecting) {
+        item.target.classList.add('in-view');
+        observer.unobserve(item.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  entries.forEach(function (el) { observer.observe(el); });
+})();
+
+// ---------------------------------------------------------------------
+// #1 Lightbox for gallery images — click any ".image-gallery img" to
+// view it full-screen, with prev/next and Esc-to-close.
+// ---------------------------------------------------------------------
+(function () {
+  var images = Array.prototype.slice.call(document.querySelectorAll('.image-gallery img'));
+  if (!images.length) return;
+
+  var lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML =
+    '<div class="lightbox-close">✕ CLOSE</div>' +
+    '<div class="lightbox-nav lightbox-prev">‹</div>' +
+    '<img src="" alt="">' +
+    '<div class="lightbox-nav lightbox-next">›</div>' +
+    '<div class="lightbox-caption"></div>';
+  document.body.appendChild(lightbox);
+
+  var imgEl = lightbox.querySelector('img');
+  var captionEl = lightbox.querySelector('.lightbox-caption');
+  var current = 0;
+
+  function show(index) {
+    current = (index + images.length) % images.length;
+    var src = images[current];
+    imgEl.src = src.getAttribute('src');
+    imgEl.alt = src.getAttribute('alt') || '';
+    var figcaption = src.parentElement.querySelector('figcaption');
+    captionEl.textContent = figcaption
+      ? figcaption.textContent + '  —  ' + (current + 1) + ' / ' + images.length
+      : (current + 1) + ' / ' + images.length;
+  }
+
+  function open(index) {
+    show(index);
+    lightbox.classList.add('open');
+  }
+  function close() {
+    lightbox.classList.remove('open');
+  }
+
+  images.forEach(function (img, i) {
+    img.addEventListener('click', function () { open(i); });
+  });
+
+  lightbox.querySelector('.lightbox-close').addEventListener('click', close);
+  lightbox.querySelector('.lightbox-prev').addEventListener('click', function () { show(current - 1); });
+  lightbox.querySelector('.lightbox-next').addEventListener('click', function () { show(current + 1); });
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+})();
+
+// ---------------------------------------------------------------------
+// #10 Typing effect for the hero role line (landing page only).
+// Cycles through each role, typing and deleting like a typewriter.
+// ---------------------------------------------------------------------
+(function () {
+  var el = document.getElementById('role-typed');
+  if (!el) return;
+
+  var roles = ['3D Artist', 'Product Animation','3D Generalist ','3D Interior Design','Art Director','Video Editor'];
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = roles.join(' / ');
+    return;
+  }
+
+  var roleIndex = 0, charIndex = 0, deleting = false;
+
+  function tick() {
+    var word = roles[roleIndex];
+    if (!deleting) {
+      charIndex++;
+      el.textContent = word.slice(0, charIndex);
+      if (charIndex === word.length) {
+        deleting = true;
+        setTimeout(tick, 1400);
+        return;
+      }
+    } else {
+      charIndex--;
+      el.textContent = word.slice(0, charIndex);
+      if (charIndex === 0) {
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+      }
+    }
+    setTimeout(tick, deleting ? 35 : 65);
+  }
+  tick();
+})();
