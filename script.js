@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------
+// Real "last updated" info pulled from this repo's GitHub commit history.
+// Works on:
+//  - index.html: each portfolio card shows the last commit date of the
+//    page it links to.
+//  - the article pages themselves: the "UPDATE:" field shows the last
+//    commit date of that page's own HTML file.
+// ---------------------------------------------------------------------
 (function () {
   var GH_OWNER = 'faisabstraks';
   var GH_REPO = 'Portfolio_web';
@@ -175,6 +183,31 @@ document.addEventListener('keydown', function (e) {
 });
 
 // ---------------------------------------------------------------------
+// Entry category filter — "All / Personal / Commission" buttons above
+// the entries list. Only runs on pages that have a ".filter-bar".
+// ---------------------------------------------------------------------
+(function () {
+  var bar = document.querySelector('.filter-bar');
+  if (!bar) return;
+
+  var buttons = bar.querySelectorAll('.filter-btn');
+  var entries = document.querySelectorAll('.entry[data-category]');
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+
+      var filter = btn.getAttribute('data-filter');
+      entries.forEach(function (entry) {
+        var match = filter === 'all' || entry.getAttribute('data-category') === filter;
+        entry.classList.toggle('is-filtered-out', !match);
+      });
+    });
+  });
+})();
+
+// ---------------------------------------------------------------------
 // Hero viewport shape cycler — alternates between the wireframe cube
 // and the wireframe sphere every few seconds (landing page only).
 // ---------------------------------------------------------------------
@@ -187,7 +220,7 @@ document.addEventListener('keydown', function (e) {
     shapes[index].classList.remove('is-active');
     index = (index + 1) % shapes.length;
     shapes[index].classList.add('is-active');
-  }, 5000);
+  }, 9000);
 })();
 
 // ---------------------------------------------------------------------

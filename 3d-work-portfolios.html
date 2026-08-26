@@ -28,7 +28,6 @@
     </nav>
   </div>
   <div class="ruler"></div>
-  <div class="scroll-progress"></div>
 </header>
 
 <section class="wrap">
@@ -50,7 +49,7 @@
       learning and skill development only, and some are commissioned pieces for several brands.
     </div>
     <div class="article-meta-row">
-      <span>CATEGORY: <strong>3D Works</strong></span>
+      <span>CATEGORY: <strong>3D Art</strong></span>
       <span>SOFTWARE: <strong>Blender, After Effect, Premiere Pro</strong></span>
       <span>UPDATE: <strong>Regularly</strong></span>
     </div>
@@ -58,14 +57,19 @@
 </section>
 
 
-<!-- =====   Video Section  & Galery Section   ENTRY (video type) — duplicate this block for each video project        ===== -->
+<!-- =====   Video Section             ENTRY (video type) — duplicate this block for each video project               ===== -->
 
 
 <section class="wrap">
+  <div class="filter-bar">
+    <button class="filter-btn is-active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="personal">Personal</button>
+    <button class="filter-btn" data-filter="commission">Commission</button>
+  </div>
   <div class="entries">
 
     <!-- ===== ENTRY (video type) — duplicate this block for each video project ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">01</span>
         <h2 class="entry-title">The Abandoned Cabin</h2>
@@ -83,7 +87,7 @@
     </div>
 
     <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">02</span>
         <h2 class="entry-title">Forza Horizon 6 Trailer (fan made)</h2>
@@ -101,7 +105,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">03</span>
         <h2 class="entry-title">Kawal Putusan MK</h2>
@@ -119,7 +123,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">04</span>
         <h2 class="entry-title">Realistic Approach!</h2>
@@ -138,7 +142,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">05</span>
         <h2 class="entry-title">FOX 3</h2>
@@ -156,7 +160,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">06</span>
         <h2 class="entry-title">Underwater Deep Oceon</h2>
@@ -173,7 +177,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="commission">
       <div class="entry-head">
         <span class="entry-index">07</span>
         <h2 class="entry-title">NR Hair Care</h2>
@@ -192,7 +196,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="commission">
       <div class="entry-head">
         <span class="entry-index">08</span>
         <h2 class="entry-title">GUTE</h2>
@@ -211,7 +215,7 @@
     </div>
 
  <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="commission">
       <div class="entry-head">
         <span class="entry-index">09</span>
         <h2 class="entry-title">FERGUS</h2>
@@ -230,7 +234,7 @@
     </div>
 
 <!-- ===== ENTRY (video type) ===== -->
-    <div class="entry">
+    <div class="entry" data-category="personal">
       <div class="entry-head">
         <span class="entry-index">10</span>
         <h2 class="entry-title">Collage Final Project!</h2>
@@ -247,7 +251,7 @@
     </div>
 
     <!-- ===== ENTRY (image-gallery type) — for non-video projects like interior renders =====-->
-    <div class="entry">
+    <div class="entry" data-category="commission">
       <div class="entry-head">
         <span class="entry-index">11</span>
         <h2 class="entry-title">Cussons Baby</h2>
