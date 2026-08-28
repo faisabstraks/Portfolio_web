@@ -2,7 +2,7 @@
 
 A personal portfolio website for **Fahran Fa'is (Faisabstrak)** — a creative artist working in 3D art, visual storytelling, product animation, and 3D interior design. The site showcases project work across 3D art, film/editing, and Blender add-on development.
 
-🔗 Live site: *add your deployed URL here*
+🔗 Live site: https://portfolio.faisabstrak.workers.dev/
 
 ## Features
 
